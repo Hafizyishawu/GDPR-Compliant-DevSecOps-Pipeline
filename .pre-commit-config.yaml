@@ -1,0 +1,29 @@
+exclude: |
+  (?x)(
+    ^\.venv/|
+    ^venv/|
+    ^env/|
+    ^node_modules/|
+    ^dist/|
+    ^build/
+  )
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+
+  - repo: https://github.com/returntocorp/semgrep
+    rev: v1.68.0
+    hooks:
+      - id: semgrep
+        args: ["--config", "p/ci"]
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.1
+    hooks:
+      - id: gitleaks
+        args: ["protect", "--staged"]
