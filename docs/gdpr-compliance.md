@@ -34,7 +34,7 @@ if (!req.body.gdprConsent || !req.body.gdprConsent.marketing) {
     error: 'GDPR consent required for data processing'
   });
 }
-
+```
 Business Impact: Prevents processing without lawful basis - primary cause of ICO fines
 
 ### Article 15 - Right of Access (Data Subject Access Requests)
@@ -45,7 +45,8 @@ Business Impact: Prevents processing without lawful basis - primary cause of ICO
 - Includes all personal data and processing history
 
 **API Endpoint:** `GET /customers/:id/data-export`
-javascript// Returns comprehensive data export
+```javascript
+// Returns comprehensive data export
 res.json({
   exportDate: new Date(),
   customerId: customer.customerId,
@@ -53,9 +54,8 @@ res.json({
   consents: customer.gdprConsent,
   auditLog: customer.auditLog
 });
-
+```
 **Compliance Benefit:**
-
 - Automated response to data subject requests
 - Reduces manual effort and human error
 - ICO requires response within 1 month - our API provides instant response
@@ -68,19 +68,19 @@ res.json({
 - Compliance with data retention requirements
 
 **API Endpoint:** `DELETE /customers/:id`
-javascript// Implements erasure while maintaining compliance
+```javascript
+// Implements erasure while maintaining compliance
 this.personalData = {
   firstName: '[ERASED]',
   lastName: '[ERASED]',
   email: '[ERASED]',
   phone: '[ERASED]'
 };
-
+```
 **Legal Consideration:**
 - Balances erasure rights with legal retention requirements
 - Maintains audit trail for regulatory compliance
 - Prevents "double jeopardy" of losing compliance evidence
-
 
 ### Article 25 - Data Protection by Design and by Default
 
@@ -96,12 +96,14 @@ this.personalData = {
 - Syft: Provides transparency for data processor relationships
 
 **Technical Implementation:**
-yaml# GitHub Actions automatically enforces privacy by design
+```yaml
+# GitHub Actions automatically enforces privacy by design
 - name: PII Detection with Semgrep
   run: semgrep --config=.semgrep/pii-detection.yml
 
 - name: Data Leak Prevention
   run: gitleaks detect --source .
+```
 
 ### Article 30 - Records of Processing Activities
 
@@ -111,7 +113,8 @@ yaml# GitHub Actions automatically enforces privacy by design
 - Timestamp and user tracking for accountability
 
 **Code Implementation:**
-javascript// Every data operation creates audit record
+```javascript
+// Every data operation creates audit record
 customer.auditLog.push({
   action: 'data_exported',
   timestamp: new Date(),
@@ -119,7 +122,7 @@ customer.auditLog.push({
   ipAddress: req.ip,
   userAgent: req.get('User-Agent')
 });
-
+```
 **Compliance Value:**
 - ICO auditors can see complete processing history
 - Demonstrates accountability and transparency
@@ -146,12 +149,13 @@ customer.auditLog.push({
 - Alert mechanisms for rapid response
 
 **Pipeline Integration:**
-yaml- name: Breach Detection
+```yaml
+- name: Breach Detection
   run: |
     # Detect potential data exposure patterns
     # Alert security team within detection thresholds
     # Generate incident response documentation
-
+```
 **UK-Specific Compliance:**
 - ICO requires notification within 72 hours
 - Automated detection reduces discovery time
@@ -239,15 +243,15 @@ yaml- name: Breach Detection
 - Advanced reporting capabilities
 - Integration with existing systems
 
-**Compliance Metrics
+**Compliance Metrics**
 
-**Key Performance Indicators
+**Key Performance Indicators**
 - Data Subject Request Response Time: Target <1 hour (regulatory requirement: 1 month)
 - Compliance Check Coverage: 100% of data processing operations
 - Audit Trail Completeness: 100% of data operations logged
 - Security Scan Pass Rate: 100% pipeline security checks passed
 
-**Reporting Dashboard
+**Reporting Dashboard**
 - Real-time compliance status
 - Monthly compliance reports
 - Quarterly risk assessments
