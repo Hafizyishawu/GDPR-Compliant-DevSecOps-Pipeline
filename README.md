@@ -19,3 +19,19 @@ This pipeline implements "Privacy by Design" (Article 25) directly into the deve
 - Demonstrates due diligence to auditors
 - Automates Article 25 compliance
 - Provides Article 30 documentation automatically
+
+## Technical Implementation
+
+### GDPR Articles Addressed
+
+- **Article 6**: Lawful basis for processing (consent validation)
+- **Article 15**: Right of access (data export endpoint)
+- **Article 17**: Right to erasure (deletion with audit trail)
+- **Article 25**: Data protection by design (built-in privacy controls)
+- **Article 30**: Records of processing activities (comprehensive audit logging)
+
+### UK-Specific Considerations
+
+- Data residency requirements (UK-only deployment)
+- ICO notification timeline compliance (32-hour breach detection)
+- Post-Brexit data adequacy considerations
