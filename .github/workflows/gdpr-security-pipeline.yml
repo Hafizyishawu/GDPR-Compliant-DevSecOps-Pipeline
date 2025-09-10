@@ -191,11 +191,11 @@ jobs:
       run: |
         python scripts/generate-security-report.py
 
-    - name: Upload Executive Report
+    - name: Upload All Security Reports
       uses: actions/upload-artifact@v4
       with:
-        name: executive-security-report
-        path: security-reports/executive-report.html
+        name: gdpr-security-reports-${{ github.run_number }}
+        path: security-reports/
         retention-days: 30
 
     # Compliance Status Check
