@@ -1,0 +1,133 @@
+name: GDPR-Compliant DevSecOps Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  NODE_VERSION: '18'
+
+jobs:
+  gdpr-compliance-scan:
+    name: GDPR Compliance & Security Scanning
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: app/package-lock.json
+
+    - name: Install dependencies
+      run: |
+        cd app
+        npm ci
+
+    # GDPR Article 25 - Privacy by Design
+    - name: PII Detection with Semgrep
+      run: |
+        pip install semgrep
+        semgrep --config=security/semgrep/pii-detection.yml --json --output=security-reports/pii-scan.json .
+        semgrep --config=security/semgrep/pii-detection.yml .
+
+    - name: GDPR Compliance Check with Semgrep
+      run: |
+        semgrep --config=security/semgrep/gdpr-compliance.yml --json --output=security-reports/gdpr-scan.json .
+        semgrep --config=security/semgrep/gdpr-compliance.yml .
+      continue-on-error: true
+
+    # GDPR Article 32 - Security of Processing
+    - name: Install GitLeaks
+      run: |
+        wget https://github.com/gitleaks/gitleaks/releases/download/v8.18.0/gitleaks_8.18.0_linux_x64.tar.gz
+        tar xzf gitleaks_8.18.0_linux_x64.tar.gz
+        sudo mv gitleaks /usr/local/bin/
+
+    - name: Secret & PII Detection with GitLeaks
+      run: |
+        mkdir -p security-reports
+        gitleaks detect --config=security/gitleaks/.gitleaks.toml --source=. --report-format=json --report-path=security-reports/gitleaks-report.json --verbose
+
+    # Supply Chain Security & SBOM Generation
+    - name: Install Syft
+      run: |
+        curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+
+    - name: Generate SBOM with Syft
+      run: |
+        mkdir -p security-reports
+        cd app
+        syft . -o spdx-json=../security-reports/sbom.spdx.json
+        syft . -o table=../security-reports/sbom.txt
+
+    - name: Install Grype
+      run: |
+        curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+
+    - name: Vulnerability Scanning with Grype
+      run: |
+        cd app
+        grype . --output json --file ../security-reports/vulnerabilities.json
+        grype . --output table --file ../security-reports/vulnerabilities.txt
+
+    # Container Security (if using Docker)
+    - name: Build Container Image
+      run: |
+        cd app
+        echo "FROM node:18-alpine
+        WORKDIR /app
+        COPY package*.json ./
+        RUN npm ci --only=production
+        COPY . .
+        EXPOSE 3000
+        CMD [\"npm\", \"start\"]" > Dockerfile
+        docker build -t gdpr-customer-api:latest .
+
+    - name: Container Security Scan
+      run: |
+        syft gdpr-customer-api:latest -o spdx-json=security-reports/container-sbom.json
+        grype gdpr-customer-api:latest --output json --file security-reports/container-vulnerabilities.json
+
+    # GDPR Compliance Reporting
+    - name: Generate GDPR Compliance Report
+      run: |
+        mkdir -p security-reports
+        echo "# GDPR Compliance Scan Report" > security-reports/gdpr-report.md
+        echo "Generated: $(date)" >> security-reports/gdpr-report.md
+        echo "" >> security-reports/gdpr-report.md
+        echo "## Security Scans Completed:" >> security-reports/gdpr-report.md
+        echo "- PII Detection (Semgrep)" >> security-reports/gdpr-report.md
+        echo "- Secret Scanning (GitLeaks)" >> security-reports/gdpr-report.md
+        echo "- Dependency Scanning (Grype)" >> security-reports/gdpr-report.md
+        echo "- SBOM Generation (Syft)" >> security-reports/gdpr-report.md
+        echo "" >> security-reports/gdpr-report.md
+        echo "## Compliance Status:" >> security-reports/gdpr-report.md
+        if [ -s security-reports/pii-scan.json ]; then
+          echo "- PII violations detected - review required" >> security-reports/gdpr-report.md
+        else
+          echo "- No PII violations detected" >> security-reports/gdpr-report.md
+        fi
+
+    - name: Upload Security Reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: gdpr-security-reports
+        path: security-reports/
+        retention-days: 30
+
+    # Compliance Status Check
+    - name: GDPR Compliance Status
+      run: |
+        echo "GDPR Compliance Pipeline Complete"
+        echo "Security reports available in artifacts"
+        echo "Ready for UK production deployment"
+        ls -la security-reports/

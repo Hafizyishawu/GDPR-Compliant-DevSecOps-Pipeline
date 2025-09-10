@@ -1,0 +1,36 @@
+rules:
+  - id: missing-audit-log
+    message: "Data operation without audit logging - GDPR Article 30 compliance requirement"
+    languages: [javascript]
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $CUSTOMER.save()
+          - pattern: |
+              $CUSTOMER.update(...)
+          - pattern: |
+              $CUSTOMER.remove()
+    pattern-not: |
+      $CUSTOMER.auditLog.push(...)
+      ...
+      $CUSTOMER.save()
+
+  - id: data-retention-violation
+    message: "Potential data retention policy violation - GDPR Article 5 storage limitation"
+    languages: [javascript]
+    severity: INFO
+    patterns:
+      - pattern: |
+          createdAt: { type: Date, default: Date.now }
+    pattern-not: |
+      retentionperiod: $DAYS
+
+  - Id: cross-border-transfer
+    message: "Potential cross-border data transfer - UK GDPR Adequacy requirements"
+    languages: [javascript, yaml]
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern-regex: "region.*us-|eu-|ap-"
+          - pattern-regex: "location.*america|europe|asia"

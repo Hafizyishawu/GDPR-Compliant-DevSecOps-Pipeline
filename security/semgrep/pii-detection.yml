@@ -1,0 +1,66 @@
+rules:
+  - id: detect-pii-in-logs
+    message: "Potenttial PII detection in logging statement - GDPR Article 5 violation risk"
+    languages: [javascript, python, java]
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: console.log(..., $EMAIL, ...)
+          - pattern: console.log(..., $PHONE, ...)
+          - pattern: console.log(..., $SSN, ...)
+    metavariable-regex:
+      EMAIL: .*email.*
+      PHONE: .*(phone|mobile|tel).*
+      SSN: .*(ssn|nationalInsurance|nino).*
+
+  - id: hardcoded-personal-dat
+    message: "Hardcoded personal data detected - GDPR data minimization violation"
+    languages: [javascript, python]
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: const $VAR = "$EMAIL"
+          - pattern: let $VAR = "$PHONE"
+    metavariable-regex:
+      EMAIL: .*@.*\..*
+      PHONE: (\+44|0)[0-9]{10,11}
+
+  - id: missing-consent-check
+    message: "Data processing without explicit consent validation - GDPR Article 6 violation"
+    languages: [javascript]
+    severity: WARNING
+    patterns:
+      - pattern: |
+          app.post($ROUTE, async (req, res) => {
+           ...
+           new Customer($DATA)
+           ...
+          })
+    pattern-not: |
+      app.post($ROUTE, async (req, res) => {
+        ...
+        if (!req.body.gdprConsent) { ... }
+        ...
+        new Customer($DATA)
+        ...
+      })
+
+  - id: unencrypted-pii-storage
+    message: "PII stored without encryption - GDPR Article 32 violation"
+    languages: [javascript]
+    severity: ERROR
+    patterns:
+      - pattern: |
+          $SCHEMA = new mongoose.Schema({
+            ...,
+            $FIELD: String,
+            ...
+          })
+    metavariable-regex:
+      FIELD: .*(email|phone|address|name|dob).*
+    pattern-not: |
+      $SCHEMA = new mongoose.Schema({
+        ...,
+        $FIELD: { type: String, encrypt: true },
+        ...
+      })

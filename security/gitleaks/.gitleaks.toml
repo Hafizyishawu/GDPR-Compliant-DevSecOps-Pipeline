@@ -1,0 +1,28 @@
+title = "GDPR-Compliant GitLeaks Configuration"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "UK-postcode"
+description = "UK Postcode - potential PII"
+regex = '''[A-Z]{1,2}[0-9R][0-9A-Z]?\s?[0-9][A-Z]{2}'''
+tags = ["pii", "financial", "pci-dss"]
+
+[[rules]]
+id = "nhs-number"
+description = "NHS number - special category personal data"
+regex = '''\b\d{3}\s?\d{3}\s?\d{4}\b'''
+tags = ["pii", "healthcare", "nhs"]
+
+[allowlist]
+description = "Allowlist for test data and documentation"
+paths = [
+    '''docs/.*''',
+    '''.*test.*''',
+    '''.*example.*'''
+]
+
+commits = [
+    "allowlist-commit-hash-here"
+]
