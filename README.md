@@ -13,6 +13,7 @@ This pipeline implements "Privacy by Design" (Article 25) directly into the deve
 - Audit logging for accountability requirements
 - Retention policy enforcement
 - Supply chain transparency for data processors
+- Automated compliance reporting
 
 ## UK Compliance Benefits
 - Reduces ICO fine risk

@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevSecOps Security Assessment Report</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            background: #f8f9fa;
+        }
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .summary-card h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 1.2em;
+        }
+        .summary-card .value {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .risk-low { color: #28a745; }
+        .risk-medium { color: #ffc107; }
+        .risk-high { color: #dc3545; }
+        .risk-critical { color: #6f42c1; }
+        .compliant { color: #28a745; }
+        .non-compliant { color: #dc3545; }
+        .partially-compliant { color: #ffc107; }
+        .content {
+            padding: 30px;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section h2 {
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .issue {
+            background: #fff;
+            border-left: 4px solid #dc3545;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .issue.warning {
+            border-left-color: #ffc107;
+        }
+        .issue.info {
+            border-left-color: #17a2b8;
+        }
+        .issue h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .issue .severity {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .severity.high, .severity.critical {
+            background: #dc3545;
+            color: white;
+        }
+        .severity.medium {
+            background: #ffc107;
+            color: #333;
+        }
+        .severity.low {
+            background: #28a745;
+            color: white;
+        }
+        .recommendations {
+            background: #e8f4fd;
+            border: 1px solid #bee5eb;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .recommendations ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .recommendations li {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .footer {
+            background: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .no-issues {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        .gdpr-badge {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>DevSecOps Security Assessment</h1>
+            <p>GDPR-Compliant Pipeline Security Report</p>
+            <p>Generated: 2025-09-10 20:57:10 UTC</p>
+        </div>
+
+        <div class="summary">
+            <div class="summary-card">
+                <h3>Overall Risk Level</h3>
+                <div class="value risk-high">HIGH</div>
+            </div>
+            <div class="summary-card">
+                <h3>Compliance Status</h3>
+                <div class="value non_compliant">NON-COMPLIANT</div>
+            </div>
+            <div class="summary-card">
+                <h3>Security Issues</h3>
+                <div class="value">3</div>
+            </div>
+            <div class="summary-card">
+                <h3>Files Scanned</h3>
+                <div class="value">5</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h2>Executive Summary</h2>
+                <p>This automated security assessment evaluates our DevSecOps pipeline against UK GDPR requirements and cybersecurity best practices. The scan covers static code analysis, secret detection, dependency vulnerabilities, and GDPR compliance patterns.</p>
+
+
+                <p><strong>Risk Assessment:</strong> 3 security issue(s) detected requiring attention. Immediate remediation recommended for high-severity findings to maintain compliance posture.</p>
+
+            </div>
+
+
+            <div class="section">
+                <h2>Security Findings</h2>
+
+                <div class="issue">
+                    <h4>
+                        Hardcoded personal data detected - GDPR data minimization violation
+                        <span class="severity error">ERROR</span>
+
+                    </h4>
+                    <p><strong>File:</strong> app/test_violations.js (Line 3)</p>
+                    <p><strong>Business Impact:</strong> Potential compliance and security risk</p>
+                    <p><strong>Recommended Action:</strong> Review security best practices and implement appropriate controls</p>
+                </div>
+
+                <div class="issue">
+                    <h4>
+                        Potenttial PII detection in logging statement - GDPR Article 5 violation risk
+                        <span class="severity error">ERROR</span>
+
+                    </h4>
+                    <p><strong>File:</strong> app/test_violations.js (Line 4)</p>
+                    <p><strong>Business Impact:</strong> Data exposure in logs - breach notification requirement, compliance violation</p>
+                    <p><strong>Recommended Action:</strong> Implement PII filtering in logging, use structured logging with field redaction</p>
+                </div>
+
+                <div class="issue">
+                    <h4>
+                        PII stored without encryption - GDPR Article 32 violation
+                        <span class="severity error">ERROR</span>
+
+                    </h4>
+                    <p><strong>File:</strong> app/test_violations.js (Line 6)</p>
+                    <p><strong>Business Impact:</strong> Article 32 violation - data security inadequacy, audit failure risk</p>
+                    <p><strong>Recommended Action:</strong> Implement field-level encryption for sensitive data in database</p>
+                </div>
+
+            </div>
+
+
+            <div class="section">
+                <h2>Strategic Recommendations</h2>
+                <div class="recommendations">
+                    <ul>
+
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Compliance Framework Coverage</h2>
+                <ul>
+                    <li><strong>UK GDPR Articles:</strong> 5 (Data minimization), 6 (Lawful basis), 15 (Access rights), 17 (Erasure), 25 (Privacy by design), 30 (Records), 32 (Security)</li>
+                    <li><strong>Security Controls:</strong> Static code analysis, secret detection, dependency scanning, supply chain transparency</li>
+                    <li><strong>Automated Compliance:</strong> Pre-commit hooks, CI/CD integration, continuous monitoring</li>
+                    <li><strong>Risk Management:</strong> Vulnerability assessment, breach prevention, audit trail maintenance</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>This report was automatically generated by our GDPR-Compliant DevSecOps Pipeline</p>
+            <p>For technical details, review the individual scan results in the security-reports directory</p>
+        </div>
+    </div>
+</body>
+</html>
